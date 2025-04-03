@@ -36,8 +36,6 @@ bool valid_year(string y){
     return (year_ <= 2025 && sem_ >= 1 && sem_ <= 2);
 }
 
-// CAMBIAR POR UN DO WHILE
-
 
 void leer_dir(){
     
@@ -65,8 +63,6 @@ void leer_dir(){
             if (pos != string::npos){ //SI SE ENCUENTRA TIPO
                 pos += 6;
                 string type = texto.substr(pos, texto.find("\n", pos) - pos); //DESDE POS A SALTO DE LINEA
-                type.erase(remove(type.begin(), type.end(), '\n'), type.end());
-                cout << type << endl;
                 if (type == "certamen" || type == "certamen\n" || type == "certamen\r"){
                     pos = texto.find("numero: ");
                     if (pos != string::npos){ //SI SE ENCUENTRA NUMERO
@@ -83,8 +79,7 @@ void leer_dir(){
                                 if (stoi(anio) > 2025 || sem < 1 || sem > 2){ //INVAlIDO
                                     corruptos.push_back(file_name);
                                 } else {
-                                    cout << "SLAI" << endl; //EXITO ^V^ 
-                                    cout << type << " " << num << " " << anio << " " << sem << endl; // PROBANDO :P :P :P
+                                    cout << "Certamen valido" << endl; //EXITO ^V^ 
                                 }
                             } else {
                                 corruptos.push_back(file_name);
@@ -94,7 +89,38 @@ void leer_dir(){
                         corruptos.push_back(file_name);
                     }
                 } else {
-                cout<<" "<<endl;
+                    if (type == "control" || type == "control\n" || type == "control\r"){
+                        pos = texto.find("numero: ");
+                        if (pos != string::npos){ // SI ES QUE SE ENCUENTRA NUMERO
+                            pos += 8;
+                            string numero = texto.substr(pos, texto.find("\n", pos));
+                            if (valid_num(numero)){
+                                pos = texto.find("semestre_publicacion: ");
+                                if (pos != string::npos){ // SI SE ENCUENTRA EL SEMENSTRE
+                                    pos += 22;
+                                    string publicacion = texto.substr(pos, texto.find("\n", pos));
+                                    if (valid_year(publicacion)){
+                                        cout << "Control valido" << endl;
+                                    } else {
+                                        //INVALIDO
+                                        cout <<"NO"<<endl;
+                                    }
+                                } else {
+                                    //SEMESTRE INVALIDO
+                                    cout <<"NO"<<endl;
+                                }
+                            } else {
+                                //numero invalido
+                                cout <<"NO"<<endl;
+                            }
+                        }
+                    } else {
+                        if (type == "tarea" || type == "tarea\n" || type == "tarea\r"){
+                            cout << "HW" << endl;
+                        } else {
+                            cout << "lolaso No" << endl;
+                        }
+                    }
                 }
             } else {
                 corruptos.push_back(file_name);
